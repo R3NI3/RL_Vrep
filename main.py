@@ -10,10 +10,11 @@ time_step = 0.01
 motor_names = ['LeftMotor', 'RightMotor']
 object_names = ['Bola']
 robot_names = ['DifferentialDriveRobot']
+epsilon = 0.8
 
 NUM_ACT = 10 #discretization of actions per motor
 
-#def select_action(epsilon, state):
+#def select_action(state):
 #    sample = random.random()
 
 #    if sample > epsilon:
@@ -31,6 +32,9 @@ def get_reward(state_info):
     reward = 1/ distance if distance != 0 else 1000
     return reward
 
+def train(env, model):
+    actions = select_action()
+
 
 def main():
     env = vrep_env(ip, port, time_step, motor_names, robot_names, object_names)
@@ -40,7 +44,6 @@ def main():
     env.startSimulation()
     env.stop_robot(motor_names)
     env.stopSimulation()
-    print('done')
     time.sleep(.05)
 
     # --------- Dummy Sim ---
@@ -50,6 +53,7 @@ def main():
         dt = 0
         while (dt < 1):
             env.setJointVelocity(motor_names, [10,10])
+            state_info = env.getSimulationState()
             dt += time_step
         env.stop_robot(motor_names)
         env.stopSimulation()
@@ -65,7 +69,6 @@ def main():
     #test(clientID, motor_handles, target_handle, ddr_handle, dt, model)
 
     # close any open connections
-    #vrep.simxFinish(-1)
     env.finishSimulation()
 
 

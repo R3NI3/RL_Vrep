@@ -2,7 +2,7 @@ import vrep
 import numpy as np
 import random
 import time
-from enviroment import vrep_env
+from environment import vrep_env
 
 ip = '127.0.0.1'
 port = 19997

@@ -71,7 +71,7 @@ class vrep_env():
                 -1, # retrieve absolute, not relative, position
                 vrep.simx_opmode_blocking)
         if _ !=0 : raise Exception()
-        else: return robot_xyz
+        else: return obj_xyz
 
     def get_orientation(self, obj_name):
         if obj_name in self.ddr_handles:
@@ -87,7 +87,7 @@ class vrep_env():
                 -1, # retrieve absolute, not relative, position
                 vrep.simx_opmode_blocking)
         if _ !=0 : raise Exception()
-        else: return obj_handle
+        else: return obj_ang
 
     def setJointVelocity(self, motor_names, target_velocity):
         for idx,motor_name in enumerate(motor_names):
@@ -99,6 +99,15 @@ class vrep_env():
                 return -1
         vrep.simxSynchronousTrigger(self.clientID)
         return 0
+
+    def getSimulationState(self):
+        state = []
+        for name, handle in self.ddr_handles.items():
+            state += [{name:[self.get_position(name),self.get_orientation(name)]}]
+        for name, handle in self.obj_handles.items():
+            state += [{name:[self.get_position(name),self.get_orientation(name)]}]
+
+        return state
 
     def startSimulation(self):
         vrep.simxStartSimulation(self.clientID, vrep.simx_opmode_blocking)

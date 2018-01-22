@@ -26,8 +26,8 @@ NUM_ACT = 10 #discretization of actions per motor
 
 def get_reward(state_info):
     reward = 0
-    robot_pos = state_info[0]
-    target_pos = state_info[2]
+    robot_pos = np.array(state_info[robot_names[0]][0])
+    target_pos = np.array(state_info[object_names[0]][0])
     distance = np.linalg.norm(robot_pos - target_pos)
     reward = 1/ distance if distance != 0 else 1000
     return reward
@@ -54,6 +54,7 @@ def main():
         while (dt < 1):
             env.setJointVelocity(motor_names, [10,10])
             state_info = env.getSimulationState()
+            print(get_reward(state_info))
             dt += time_step
         env.stop_robot(motor_names)
         env.stopSimulation()

@@ -101,11 +101,11 @@ class vrep_env():
         return 0
 
     def getSimulationState(self):
-        state = []
+        state = {}
         for name, handle in self.ddr_handles.items():
-            state += [{name:[self.get_position(name),self.get_orientation(name)]}]
+            state[name] = [self.get_position(name),self.get_orientation(name)]
         for name, handle in self.obj_handles.items():
-            state += [{name:[self.get_position(name),self.get_orientation(name)]}]
+            state[name] = [self.get_position(name),self.get_orientation(name)]
 
         return state
 

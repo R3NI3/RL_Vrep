@@ -3,6 +3,7 @@ import numpy as np
 import random
 import time
 from environment import vrep_env
+import reinforcement
 
 ip = '127.0.0.1'
 port = 19997
@@ -38,7 +39,7 @@ def train(env, model):
 
 def main():
     env = vrep_env(ip, port, time_step, motor_names, robot_names, object_names)
-
+    reinforce = reinforcement(robot_names, object_names)
     model = None
     # --------- Stop Sim ----
     env.startSimulation()
@@ -54,7 +55,8 @@ def main():
         while (dt < 1):
             env.setJointVelocity(motor_names, [10,10])
             state_info = env.getSimulationState()
-            print(get_reward(state_info))
+            reinforce.updateInfo(state_info)
+            print(reinforce.getReward())
             dt += time_step
         env.stop_robot(motor_names)
         env.stopSimulation()

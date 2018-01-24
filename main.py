@@ -3,7 +3,7 @@ import numpy as np
 import random
 import time
 from environment import vrep_env
-import reinforcement
+from reinforcement import reinforcement
 
 ip = '127.0.0.1'
 port = 19997
@@ -11,6 +11,8 @@ time_step = 0.01
 motor_names = ['LeftMotor', 'RightMotor']
 object_names = ['Bola']
 robot_names = ['DifferentialDriveRobot']
+goal_pos = [0.73, 0, 0.0725]
+goal_limits = [0.174, -0.174]
 epsilon = 0.8
 
 NUM_ACT = 10 #discretization of actions per motor
@@ -39,7 +41,7 @@ def train(env, model):
 
 def main():
     env = vrep_env(ip, port, time_step, motor_names, robot_names, object_names)
-    reinforce = reinforcement(robot_names, object_names)
+    reinforce = reinforcement(robot_names, object_names, goal_pos, goal_limits)
     model = None
     # --------- Stop Sim ----
     env.startSimulation()
@@ -53,7 +55,7 @@ def main():
         env.startSimulation()
         dt = 0
         while (dt < 1):
-            env.setJointVelocity(motor_names, [10,10])
+            env.setJointVelocity(motor_names, [0,0])
             state_info = env.getSimulationState()
             reinforce.updateInfo(state_info)
             print(reinforce.getReward())

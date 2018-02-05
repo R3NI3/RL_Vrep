@@ -1,7 +1,10 @@
+import torch
+import torch.nn as nn
 import numpy as np
 
-class reinforcement():
+class reinforcement(nn.Module):
 	def __init__(self, robot_names, object_names, goal_pos, goal_limits):
+		super(reinforcement, self).__init__()
 		self.reward = 0
 		self.goal_pos = np.zeros((1,3))
 		self.robot_names = robot_names
@@ -28,3 +31,7 @@ class reinforcement():
 				if(obj_pos[1] > (self.goal_pos[1]+self.goal_limits[1])):
 					return True
 		return False
+    
+	def forward(self, x):
+		# to Do
+		return x
